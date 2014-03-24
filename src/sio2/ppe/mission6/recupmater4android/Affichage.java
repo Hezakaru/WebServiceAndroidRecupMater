@@ -1,8 +1,10 @@
 package sio2.ppe.mission6.recupmater4android;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -24,30 +26,48 @@ public class Affichage extends Activity {
         setContentView(R.layout.activity_affichage);
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.affichage, menu);
-        return true;
+    
+        StringBuffer leBuffer = new StringBuffer("");
+    	BufferedReader leLecteur = null;
+    	try
+    	{
+    		DefaultHttpClient httpClient =   new DefaultHttpClient();
+    		HttpGet adrGet = new HttpGet();
+    		URI luri= new URI("URL DU WEB SERVICE");
+    		adrGet.setURI(luri);
+    		HttpResponse laReponse = httpClient.execute(adrGet);
+    		InputStream leFluxEntree = laReponse.getEntity().getContent();
+    		leLecteur = new BufferedReader(new InputStreamReader(leFluxEntree));
+    		HttpEntity messageEntity = laReponse.getEntity();
+    		String laLigne = leLecteur.readLine();
+        
+    		while (laLigne!=null) 
+    		{
+    			leBuffer.append(laLigne);
+    			leBuffer.append("\n");
+    			laLigne = leLecteur.readLine();
+    		}
+//    		TextView affich= (TextView)findViewById(R.id.contenu);
+//    		affich.setText(leBuffer.toString());
+    	}
+    	catch (Exception e) 
+    		{
+    		// TODO: handle exception
+    		}
+    	
+    	finally
+    	{
+    		if (leLecteur!=null)
+    		try 
+    		{
+    			leLecteur.close();
+    		}
+    		
+    		catch (IOException e) 
+    		{
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+    	}
     }
-    
-    	TextView response;
-    	String uri="";
-        HttpGet get = new HttpGet();
-        get.setURI(uri);
-        DefaultHttpClient httpClient =   new DefaultHttpClient();
-        HttpResponse httpResponse = httpClient.execute(get);
-        if (httpResponse.getStatusLine().getStatusCode() == 200) {
-            Log.d("[GET REQUEST]", "HTTP Get succeeded");
-
-            HttpEntity messageEntity = httpResponse.getEntity();
-            InputStream is = messageEntity.getContent();
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            String line;
-            while ((line = br.readLine()) != null) {
-               	response.append(line);
-            }
-    
-    
 }
