@@ -18,27 +18,28 @@ import android.view.Menu;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class Affichage extends Activity {
+public class Affichage extends Activity 
+{
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) 
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_affichage);
-    }
-
-    
+        
+        
         StringBuffer leBuffer = new StringBuffer("");
     	BufferedReader leLecteur = null;
     	try
     	{
     		DefaultHttpClient httpClient =   new DefaultHttpClient();
     		HttpGet adrGet = new HttpGet();
-    		URI luri= new URI("URL DU WEB SERVICE");
+    		URI luri= new URI("http://132.168.1.25/www/vandenboschbenjamin/serviceweb/serviceWeb2.php");
     		adrGet.setURI(luri);
     		HttpResponse laReponse = httpClient.execute(adrGet);
     		InputStream leFluxEntree = laReponse.getEntity().getContent();
     		leLecteur = new BufferedReader(new InputStreamReader(leFluxEntree));
-    		HttpEntity messageEntity = laReponse.getEntity();
+//    		HttpEntity messageEntity = laReponse.getEntity();
     		String laLigne = leLecteur.readLine();
         
     		while (laLigne!=null) 
@@ -47,9 +48,10 @@ public class Affichage extends Activity {
     			leBuffer.append("\n");
     			laLigne = leLecteur.readLine();
     		}
-//    		TextView affich= (TextView)findViewById(R.id.contenu);
-//    		affich.setText(leBuffer.toString());
-    	}
+    		TextView affich= (TextView)findViewById(R.id.contenu);
+ 			affich.setText(leBuffer.toString());
+      	}
+    	
     	catch (Exception e) 
     		{
     		// TODO: handle exception
